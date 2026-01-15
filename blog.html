@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - The Dime Drop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #ffffff;
+        }
+
+        nav {
+            background: #1e3a8a;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #e0e7ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #e0e7ff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .blog-section {
+            padding: 60px 20px;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #475569;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .blog-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .blog-card-header {
+            background: #3b82f6;
+            padding: 25px;
+            color: white;
+        }
+
+        .blog-card-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .blog-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .blog-card-category {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .blog-card-content {
+            padding: 25px;
+        }
+
+        .blog-card-excerpt {
+            color: #475569;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .read-more:hover {
+            color: #2563eb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-articles {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .no-articles h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+
+        footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo">The Dime Drop</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/blog.html">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Our Blog</h1>
+            <p>Financial insights and money news made simple</p>
+        </div>
+    </header>
+
+    <section class="blog-section">
+        <div class="container">
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all">All Articles</button>
+                <button class="filter-btn" data-category="economy">Economy</button>
+                <button class="filter-btn" data-category="stocks">Stocks</button>
+                <button class="filter-btn" data-category="real-estate">Real Estate</button>
+                <button class="filter-btn" data-category="crypto">Crypto</button>
+                <button class="filter-btn" data-category="personal-finance">Personal Finance</button>
+            </div>
+
+            <div id="articles-container">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading articles...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 The Dime Drop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let allArticles = [];
+        let currentCategory = 'all';
+
+        async function loadArticles() {
+            try {
+                const response = await fetch('/api/articles');
+                if (!response.ok) throw new Error('Failed to load articles');
+                allArticles = await response.json();
+                renderArticles();
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('articles-container').innerHTML = `
+                    <div class="no-articles">
+                        <h3>No articles yet</h3>
+                        <p>Check back soon for new content!</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderArticles() {
+            const container = document.getElementById('articles-container');
+
+            const filtered = currentCategory === 'all'
+                ? allArticles
+                : allArticles.filter(a => a.category === currentCategory);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="no-articles">
+                        <h3>No articles found</h3>
+                        <p>${currentCategory === 'all' ? 'Check back soon for new content!' : 'No articles in this category yet.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = `
+                <div class="blog-grid">
+                    ${filtered.map(article => `
+                        <article class="blog-card" onclick="window.location.href='/article.html?slug=${article.slug}'">
+                            <div class="blog-card-header">
+                                <div class="blog-card-date">${formatDate(article.publishedAt)}</div>
+                                <h2 class="blog-card-title">${escapeHtml(article.title)}</h2>
+                                <span class="blog-card-category">${escapeHtml(article.categoryDisplay || article.category)}</span>
+                            </div>
+                            <div class="blog-card-content">
+                                <p class="blog-card-excerpt">${escapeHtml(article.excerpt)}</p>
+                                <span class="read-more">Read article &rarr;</span>
+                            </div>
+                        </article>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Category filter handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                renderArticles();
+            });
+        });
+
+        // Load articles on page load
+        loadArticles();
+    </script>
+</body>
+</html>
