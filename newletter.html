@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Newsletters - The Dime Drop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8fafc;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #e0e7ff;
+        }
+
+        .nav {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .nav a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #2563eb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .newsletter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .newsletter-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .newsletter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .newsletter-header {
+            background: #3b82f6;
+            padding: 25px;
+            color: white;
+        }
+
+        .newsletter-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .newsletter-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .newsletter-category {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .premium-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .newsletter-content {
+            padding: 25px;
+        }
+
+        .newsletter-excerpt {
+            color: #475569;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .read-time {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .read-more:hover {
+            color: #2563eb;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .cta-section {
+            background: white;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            margin: 60px 0;
+            border: 2px solid #3b82f6;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .cta-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 10px;
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .cta-form button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-form button:hover {
+            background: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .newsletter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>All Newsletters</h1>
+        <p>Browse our complete archive of financial insights</p>
+    </div>
+
+    <div class="nav">
+        <a href="index.html">← Back to Home</a>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterCategory('all')">All</button>
+            <button class="filter-btn" onclick="filterCategory('stocks')">Stocks</button>
+            <button class="filter-btn" onclick="filterCategory('real-estate')">Real Estate</button>
+            <button class="filter-btn" onclick="filterCategory('crypto')">Crypto</button>
+            <button class="filter-btn" onclick="filterCategory('economy')">Economy</button>
+            <button class="filter-btn" onclick="filterCategory('personal-finance')">Personal Finance</button>
+        </div>
+
+        <div class="newsletter-grid" id="newsletterGrid">
+            <!-- Newsletter 1 -->
+            <div class="newsletter-card" data-category="economy">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 12, 2026</div>
+                    <div class="newsletter-title">What the Fed Rate Hold Means for Your Savings</div>
+                    <span class="newsletter-category">Economy</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">5 min read</div>
+                    <p class="newsletter-excerpt">The Federal Reserve decided to hold interest rates steady at 4.5%. Here's what that means for your savings account, mortgage rates, whether you should refinance, and how this impacts the broader economy...</p>
+                    <a href="newsletter-single.html?id=1" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+
+            <!-- Newsletter 2 -->
+            <div class="newsletter-card" data-category="real-estate">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 11, 2026</div>
+                    <div class="newsletter-title">5 Housing Markets Getting More Affordable</div>
+                    <span class="newsletter-category">Real Estate</span>
+                    <span class="premium-badge">Premium</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">7 min read</div>
+                    <p class="newsletter-excerpt">New data shows some cities are seeing home prices cool off. We analyze five markets where buying might make sense if you've been priced out elsewhere, including median prices, trends, and our outlook...</p>
+                    <a href="newsletter-single.html?id=2" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+
+            <!-- Newsletter 3 -->
+            <div class="newsletter-card" data-category="stocks">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 10, 2026</div>
+                    <div class="newsletter-title">Tech Stocks: Simple Guide to What's Happening</div>
+                    <span class="newsletter-category">Stocks</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">6 min read</div>
+                    <p class="newsletter-excerpt">AI chip demand is through the roof, but what does that mean for regular investors? We explain the trend in plain English and share a few companies worth keeping an eye on...</p>
+                    <a href="newsletter-single.html?id=3" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+
+            <!-- Newsletter 4 -->
+            <div class="newsletter-card" data-category="crypto">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 9, 2026</div>
+                    <div class="newsletter-title">Bitcoin's Big Week: What You Need to Know</div>
+                    <span class="newsletter-category">Crypto</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">5 min read</div>
+                    <p class="newsletter-excerpt">Bitcoin jumped 12% this week. We break down what's driving the rally, whether it's sustainable, and what it means for crypto investors and skeptics alike...</p>
+                    <a href="newsletter-single.html?id=4" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+
+            <!-- Newsletter 5 -->
+            <div class="newsletter-card" data-category="personal-finance">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 8, 2026</div>
+                    <div class="newsletter-title">How to Build an Emergency Fund in 2026</div>
+                    <span class="newsletter-category">Personal Finance</span>
+                    <span class="premium-badge">Premium</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">8 min read</div>
+                    <p class="newsletter-excerpt">With inflation cooling and interest rates stable, now's a great time to build your safety net. We share practical strategies for saving 3-6 months of expenses, where to keep your emergency fund, and how to automate the process...</p>
+                    <a href="newsletter-single.html?id=5" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+
+            <!-- Newsletter 6 -->
+            <div class="newsletter-card" data-category="stocks">
+                <div class="newsletter-header">
+                    <div class="newsletter-date">January 7, 2026</div>
+                    <div class="newsletter-title">Dividend Stocks Worth Watching</div>
+                    <span class="newsletter-category">Stocks</span>
+                    <span class="premium-badge">Premium</span>
+                </div>
+                <div class="newsletter-content">
+                    <div class="read-time">6 min read</div>
+                    <p class="newsletter-excerpt">Looking for passive income? We analyze three dividend-paying companies with solid fundamentals, consistent payment history, and yields above 4%. Perfect for long-term investors...</p>
+                    <a href="newsletter-single.html?id=6" class="read-more">Read full newsletter →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">Next →</button>
+        </div> -->
+
+        <div class="cta-section">
+            <h2>Never Miss an Issue</h2>
+            <p>Get our daily newsletter delivered straight to your inbox</p>
+            <form class="cta-form" onsubmit="handleSubmit(event)">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function filterCategory(category) {
+            const cards = document.querySelectorAll('.newsletter-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert(`Thanks for signing up, ${email}! Check your inbox for your first newsletter.`);
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
