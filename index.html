@@ -583,6 +583,45 @@
             text-align: center;
         }
 
+        nav {
+            background: #1e3a8a;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #e0e7ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
@@ -628,6 +667,16 @@
     </style>
 </head>
 <body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo">The Dime Drop</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/blog.html">Blog</a>
+            </div>
+        </div>
+    </nav>
+
     <section class="hero">
         <div class="container">
             <h1>The Dime Drop</h1>
@@ -729,7 +778,7 @@
         <div class="container">
             <h2 class="section-title">Recent Articles</h2>
             <p class="section-subtitle">See what we're writing about</p>
-            <div class="blog-grid">
+            <div class="blog-grid" id="recent-articles">
                 <div class="blog-card">
                     <div class="blog-header">
                         <div class="blog-date">January 12, 2026</div>
@@ -738,7 +787,7 @@
                     </div>
                     <div class="blog-content">
                         <p class="blog-excerpt">The Federal Reserve decided to hold interest rates steady. We break down what this means for your savings account, mortgage rates, and whether now's a good time to refinance...</p>
-                        <a href="#" class="read-more">Read article →</a>
+                        <a href="/blog.html" class="read-more">Read article &rarr;</a>
                     </div>
                 </div>
 
@@ -750,7 +799,7 @@
                     </div>
                     <div class="blog-content">
                         <p class="blog-excerpt">New data shows some cities are seeing home prices cool off. We look at five markets where buying might make sense if you've been priced out elsewhere...</p>
-                        <a href="#" class="read-more">Read article →</a>
+                        <a href="/blog.html" class="read-more">Read article &rarr;</a>
                     </div>
                 </div>
 
@@ -762,9 +811,12 @@
                     </div>
                     <div class="blog-content">
                         <p class="blog-excerpt">AI chip demand is through the roof, but what does that mean for regular investors? We explain the trend and share a few companies worth watching...</p>
-                        <a href="#" class="read-more">Read article →</a>
+                        <a href="/blog.html" class="read-more">Read article &rarr;</a>
                     </div>
                 </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/blog.html" style="display: inline-block; background: #3b82f6; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s;">View All Articles &rarr;</a>
             </div>
         </div>
     </section>
@@ -957,6 +1009,54 @@
             alert('Message sent! We\'ll get back to you within 24-48 hours.');
             event.target.reset();
         }
+
+        // Load recent articles from API
+        async function loadRecentArticles() {
+            try {
+                const response = await fetch('/api/articles');
+                if (!response.ok) return;
+                const articles = await response.json();
+                if (articles.length === 0) return;
+
+                const container = document.getElementById('recent-articles');
+                const recentArticles = articles.slice(0, 3);
+
+                container.innerHTML = recentArticles.map(article => `
+                    <div class="blog-card" onclick="window.location.href='/article.html?slug=${article.slug}'" style="cursor: pointer;">
+                        <div class="blog-header">
+                            <div class="blog-date">${formatDate(article.publishedAt)}</div>
+                            <div class="blog-title">${escapeHtml(article.title)}</div>
+                            <span class="blog-category">${escapeHtml(article.categoryDisplay || article.category)}</span>
+                        </div>
+                        <div class="blog-content">
+                            <p class="blog-excerpt">${escapeHtml(article.excerpt)}</p>
+                            <span class="read-more">Read article &rarr;</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                // Keep default placeholder articles on error
+                console.log('Using placeholder articles');
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load articles when page loads
+        loadRecentArticles();
     </script>
 </body>
 </html>
